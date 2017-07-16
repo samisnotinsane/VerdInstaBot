@@ -37,6 +37,8 @@ public class Main {
         for(String hashtag : hashtags) {
             Logger.info("Scanning posts with hashtag: " + hashtag + ".");
 
+            System.out.println("Scanning posts with hashtag: " + hashtag + ".");
+
             InstagramTagFeedRequest tagFeedRequest = new InstagramTagFeedRequest(hashtag);
             InstagramFeedResult tagFeed = insta.sendRequest(tagFeedRequest);
 
@@ -46,31 +48,52 @@ public class Main {
                 if (user.is_private()) {
                     Logger.info("User " + user.getUsername() + " is private.");
                     Logger.info("Following  " + user.getUsername() + ".");
+
+                    System.out.println("User " + user.getUsername() + " is private.");
+                    System.out.println("Following  " + user.getUsername() + ".");
+
                     insta.sendRequest(new InstagramFollowRequest(user.getPk())); // send follow request
                 }
 
                 Logger.info("Post " + feedResult.getId() + " has " +feedResult.getLike_count() + " likes.");
+
+                System.out.println("Post " + feedResult.getId() + " has " +feedResult.getLike_count() + " likes.");
+
                 List<InstagramUserSummary> likers = feedResult.getLikers();
-                for(InstagramUserSummary liker : likers) {
-                    if (user.is_private()) {
-                        Logger.info("User " + user.getUsername() + " is private.");
-                        Logger.info("Following  " + user.getUsername() + ".");
-                        insta.sendRequest(new InstagramFollowRequest(user.getPk())); // send follow request
-                        Thread.sleep(5000);
+                if (likers != null) {
+                    for (InstagramUserSummary liker : likers) {
+                        if (user.is_private()) {
+                            Logger.info("User " + user.getUsername() + " is private.");
+                            Logger.info("Following  " + user.getUsername() + ".");
+
+                            System.out.println("User " + user.getUsername() + " is private.");
+                            System.out.println("Following  " + user.getUsername() + ".");
+
+                            insta.sendRequest(new InstagramFollowRequest(user.getPk())); // send follow request
+                            Thread.sleep(5000);
+                        }
                     }
                 }
 
 
                 Logger.info("Post ID: " + feedResult.getPk() + " by user: " + user.getUsername());
 
+                System.out.println("Post ID: " + feedResult.getPk() + " by user: " + user.getUsername());
+
                 /*
                  * Issue a like every 25 secs.
                  */
                 Logger.info("Liking photo with caption: '" + feedResult.getCaption() + "'.");
+
+                System.out.println("Liking photo with caption: '" + feedResult.getCaption() + "'.");
+
                 insta.sendRequest(new InstagramLikeRequest(feedResult.getPk())); // like their post.
 
                 // Wait to avoid detection...
                 Logger.info("Sleeping to avoid detection...");
+
+                System.out.println("Sleeping to avoid detection...");
+
                 Thread.sleep(25000); // 120000
 
                 // Followers of post user
@@ -82,13 +105,22 @@ public class Main {
                 for (InstagramUserSummary followerUser : followerUsers) {
                     Logger.info(followerUser.getUsername() + " follows " + user.getUsername() + ".");
 
+                    System.out.println(followerUser.getUsername() + " follows " + user.getUsername() + ".");
+
                     if(followerUser.is_private()) {
                         Logger.info("User " + followerUser.getUsername() + " is private.");
                         Logger.info("Following user: " + followerUser.getUsername());
+
+                        System.out.println("User " + followerUser.getUsername() + " is private.");
+                        System.out.println("Following user: " + followerUser.getUsername());
+
                         insta.sendRequest(new InstagramFollowRequest(followerUser.getPk())); // send follow request
                     }
 
                     Logger.info("Sleeping to avoid detection...");
+
+                    System.out.println("Sleeping to avoid detection...");
+
                     Thread.sleep(15000);
                 }
             }
