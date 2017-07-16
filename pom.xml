@@ -9,11 +9,19 @@
     <version>1.0-SNAPSHOT</version>
 
     <dependencies>
+
         <dependency>
             <groupId>org.brunocvcunha.instagram4j</groupId>
             <artifactId>instagram4j</artifactId>
             <version>1.4</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.tinylog</groupId>
+            <artifactId>tinylog</artifactId>
+            <version>1.2</version>
+        </dependency>
+
     </dependencies>
 
 
