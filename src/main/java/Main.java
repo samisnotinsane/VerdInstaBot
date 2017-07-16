@@ -1,8 +1,5 @@
 import org.brunocvcunha.instagram4j.Instagram4j;
-import org.brunocvcunha.instagram4j.requests.InstagramFollowRequest;
-import org.brunocvcunha.instagram4j.requests.InstagramGetUserFollowersRequest;
-import org.brunocvcunha.instagram4j.requests.InstagramLikeRequest;
-import org.brunocvcunha.instagram4j.requests.InstagramTagFeedRequest;
+import org.brunocvcunha.instagram4j.requests.*;
 import org.brunocvcunha.instagram4j.requests.payload.*;
 import org.pmw.tinylog.Configurator;
 import org.pmw.tinylog.Level;
@@ -32,7 +29,18 @@ public class Main {
 
         Instagram4j insta = login();
 
-        List<String> hashtags = Arrays.asList("earlyadopter", "futuretech");
+        /*
+         * WARNING!
+         * DO NOT RUN UNLESS ABSOLUTELY SURE.
+         *
+         * Method is not guaranteed to work as it's untested.
+         */
+
+        //
+//        unfollowAll(insta); // CAUTION: Make sure you wish to unfollow *ALL* users before uncommenting!
+
+
+        List<String> hashtags = Arrays.asList("london", "londonTechWeek", "londonTechWeek2017");
 
         for(String hashtag : hashtags) {
             Logger.info("Scanning posts with hashtag: " + hashtag + ".");
@@ -121,7 +129,7 @@ public class Main {
 
                     System.out.println("Sleeping to avoid detection...");
 
-                    Thread.sleep(15000);
+                    Thread.sleep(200);
                 }
             }
         }
@@ -138,4 +146,26 @@ public class Main {
         instagram.login();
         return instagram;
     }
+
+    public static void unfollowAll(Instagram4j instagram) throws Exception {
+
+        // Load user: verd.app
+        InstagramSearchUsernameResult userResult = instagram
+                .sendRequest(new InstagramSearchUsernameRequest(instagram.getUsername()));
+        InstagramUser user = userResult.getUser();
+
+        // Load verd followers
+        InstagramGetUserFollowersResult verdFollowers = instagram
+                .sendRequest(new InstagramGetUserFollowersRequest(user.getPk()));
+
+        List<InstagramUserSummary> vFollowers = verdFollowers.getUsers();
+        for (InstagramUserSummary vFollower : vFollowers) {
+
+            // unfollow follower
+            instagram.sendRequest(new InstagramUnfollowRequest(vFollower.getPk()));
+        }
+
+    }
+
+
 }
